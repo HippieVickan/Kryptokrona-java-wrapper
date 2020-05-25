@@ -82,7 +82,7 @@ public class API {
 	
 	
 	
-	private Request requestWallet(String path,JsonObject params,JsonObject headers,String method) throws IOException, InterruptedException {
+	private Request requestWallet(String path,String params,JsonObject headers,String method) throws IOException, InterruptedException {
 		
 		
 		
@@ -98,7 +98,7 @@ public class API {
 		for(String i:headers.keySet()) connection.setRequestProperty(i, headers.getString(i));
 		
 
-		connection.getOutputStream().write(params.toString().getBytes());
+		connection.getOutputStream().write(params.getBytes());
 		
 		
 
@@ -130,7 +130,10 @@ public class API {
 	}
 	
 	public Request walletRequest(String method,JsonObject params,JsonObject headers,String httpMethod) throws IOException, InterruptedException {
-		return requestWallet(method,params,headers,httpMethod);
+		return requestWallet(method,params.toString(),headers,httpMethod);
+	}
+	public Request noParameterWalletRequest(String method,JsonObject headers,String httpMethod) throws IOException, InterruptedException {
+		return requestWallet(method,"",headers,httpMethod);
 	}
 	
 	

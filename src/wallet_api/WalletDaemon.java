@@ -108,6 +108,50 @@ public class WalletDaemon {
 		else throw e;
 		
 	}
+	
+	public void createWallet(String fileName,String password) throws WalletException, IOException, InterruptedException {
+		JsonObjectBuilder params=getGenericParameters();
+		params.add("filename", fileName);
+		params.add("password", password);
+		Request req=api.walletRequest("/wallet/create", params.build(), getGenericHeaders().build(), "POST");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) return;
+		else throw e;
+	}
+	
+	public void closeWallet() throws IOException, InterruptedException, WalletException {
+		
+		Request req=api.noParameterWalletRequest("/wallet",  getGenericHeaders().build(), "DELETE");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) return;
+		else throw e;
+	}
+	
+	public String[] getAdresses() {
+		
+	}
+	
+	
+	
+	public String getKeys() throws IOException, InterruptedException, WalletException {
+		
+		Request req=api.noParameterWalletRequest("/keys",  getGenericHeaders().build(), "DELETE");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) return req.RESULT.getString("privateViewKey");
+		else throw e;
+	}
+	public KeyPair getKeyPairAdress(String adress) throws WalletException, IOException, InterruptedException {
+		Request req=api.noParameterWalletRequest("/keys/"+adress,  getGenericHeaders().build(), "DELETE");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) return new KeyPair(req.RESULT.getString("privateSpendKey"),req.RESULT.getString("publicSpendKey"));
+		else throw e;
+	}
+	
+	
 	public WalletException handleStandardErrorCodes(int code) {
 		switch(code) {
 		
@@ -126,5 +170,15 @@ public class WalletDaemon {
 		
 		}
 		return null;
+	}
+	
+	class KeyPair {
+		public String PUB_KEY;
+		public String PRIV_KEY;
+		
+		public KeyPair(String s,String v) {
+			PUB_KEY=s;
+			PRIV_KEY=v;
+		}
 	}
 }
