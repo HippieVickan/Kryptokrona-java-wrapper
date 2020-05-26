@@ -22,7 +22,12 @@ public class Main {
 		d.createWallet("testwallet.wallet", "mysupersecretpassword");
 		d.closeWallet();
 		d.openWallet("testwallet.wallet", "mysupersecretpassword");
-
+		d.createNewAdress();
+		String pView=d.getKeys();
+		String initialAdress=d.getAdresses()[0];
+		String pSpend=d.getKeyPairAdress(initialAdress).PRIV_KEY;
+		d.closeWallet();
+		d.importByKey("importedtestwallet", "myothersupersecretpassword", 30000, pView, pSpend);
 	}
 	
 }
