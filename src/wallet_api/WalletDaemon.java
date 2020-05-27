@@ -9,6 +9,25 @@ import javax.json.JsonObjectBuilder;
 import json.API;
 import json.Request;
 
+
+/* LIST OF ALL FUNCTIONS 
+ * 
+ * WALLET:
+ * 
+ * openWallet
+ * createWallet
+ * closeWallet
+ * importKey
+ * importView
+ * importMnemonic
+ * 
+ * ADDRESSES
+ * 
+ * getAddresses
+ * createAddress
+ * 
+ */
+
 public class WalletDaemon {
 	public API api;
 	
