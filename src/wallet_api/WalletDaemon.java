@@ -132,7 +132,7 @@ public class WalletDaemon {
 	
 	public void createNewAdress() throws IOException, InterruptedException, WalletException {
 
-		Request req=api.noParameterWalletRequest("/keys",  getGenericHeaders().build(), "DELETE");
+		Request req=api.noParameterWalletRequest("/addresses/create",  getGenericHeaders().build(), "POST");
 		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
 		
 		if(e==null) return;
@@ -159,12 +159,12 @@ public class WalletDaemon {
 	
 	public String[] getAdresses() throws WalletException, IOException, InterruptedException {
 		
-		Request req=api.noParameterWalletRequest("/keys",  getGenericHeaders().build(), "GET");
+		Request req=api.noParameterWalletRequest("/addresses",  getGenericHeaders().build(), "GET");
 		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
 		
 		JsonObject resp=req.RESULT;
 		String[] toReturn=new String[resp.getJsonArray("addresses").size()];
-		
+		System.out.println(resp);
 		for(int i=0; i<=toReturn.length-1; i++) {
 			toReturn[i]=resp.getJsonArray("addresses").getString(i);
 		}
@@ -188,7 +188,7 @@ public class WalletDaemon {
 		else throw e;
 	}
 	public KeyPair getKeyPairAdress(String adress) throws WalletException, IOException, InterruptedException {
-		Request req=api.noParameterWalletRequest("/addresses/create",  getGenericHeaders().build(), "POST");
+		Request req=api.noParameterWalletRequest("/keys/"+adress,  getGenericHeaders().remove("accept").build(), "GET");
 		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
 		
 		if(e==null) return new KeyPair(req.RESULT.getString("privateSpendKey"),req.RESULT.getString("publicSpendKey"));

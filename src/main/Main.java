@@ -2,8 +2,7 @@ package main;
 
 import java.io.IOException;
 import java.io.StringReader;
-
-import javax.json.Json;
+import java.util.Random;
 
 import daemon_api.BlockMetaData;
 import daemon_api.BlockNotAcceptedException;
@@ -18,18 +17,28 @@ public class Main {
 		//time to write a proper fucking unit test. In the main class.
 		
 		WalletDaemon d=new WalletDaemon("127.0.0.1","127.0.0.1",11898,"pass");
+
 	
-		d.createWallet("testwallet.wallet", "mysupersecretpassword");
 		
-		d.closeWallet();
-		d.openWallet("testwallet.wallet", "mysupersecretpassword");
-		d.getKeys();
-		d.createNewAdress();
+		
+
+		
+		long l=new Random().nextLong();
+
+		String walletFileName="testwallet"+l+".wallet";
+		d.createWallet(walletFileName, "mysupersecretpassword");
 		String pView=d.getKeys();
 		String initialAdress=d.getAdresses()[0];
+		
+		
+		
+		
+		
+		System.out.println(initialAdress.length());
+	
 		String pSpend=d.getKeyPairAdress(initialAdress).PRIV_KEY;
 		d.closeWallet();
-		d.importByKey("importedtestwallet", "myothersupersecretpassword", 30000, pView, pSpend);
+		d.importByKey("imported"+walletFileName, "myothersupersecretpassword", 30000, pView, pSpend);
 	}
 	
 }

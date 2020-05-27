@@ -2,7 +2,6 @@ package daemon_api;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.json.JsonStructure;
 
 public class Block extends BlockHeader {
 	
