@@ -16,7 +16,7 @@ public class Main {
 	public static void main(String[] args) throws IOException, InterruptedException, BlockNotAcceptedException, WalletException {
 		//time to write a proper fucking unit test. In the main class.
 		
-		WalletDaemon d=new WalletDaemon("80.216.14.90","80.216.14.90",11898,"pass");
+		WalletDaemon d=new WalletDaemon("127.0.0.1","127.0.0.1",11898,"pass");
 		
 		long l=new Random().nextLong();
 
@@ -30,9 +30,10 @@ public class Main {
 		String initialAdress = d.getAdresses()[0];
 		
 		
-		d.closeWallet();
-		d.openWallet(walletFileName, "mysupersecretpassword");
-		d.createNewAdress();
+		System.out.println(initialAdress.length());
+		
+		
+		//d.createNewAdress();
 		String pSpend=d.getKeyPairAdress(initialAdress).PRIV_KEY;
 		d.closeWallet();
 		d.importByKey("imported"+walletFileName, "myothersupersecretpassword", 30000, pView, pSpend);

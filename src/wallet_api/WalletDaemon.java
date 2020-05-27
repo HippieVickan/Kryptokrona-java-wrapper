@@ -184,7 +184,7 @@ public class WalletDaemon {
 		else throw e;
 	}
 	public KeyPair getKeyPairAdress(String adress) throws WalletException, IOException, InterruptedException {
-		Request req=api.noParameterWalletRequest("/keys/"+adress,  getGenericHeaders().build(), "POST");
+		Request req=api.noParameterWalletRequest("/keys/"+adress,  getGenericHeaders().remove("accept").build(), "GET");
 		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
 		
 		if(e==null) return new KeyPair(req.RESULT.getString("privateSpendKey"),req.RESULT.getString("publicSpendKey"));
