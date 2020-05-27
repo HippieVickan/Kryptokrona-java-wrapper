@@ -82,7 +82,46 @@ public class API {
 	
 	
 	
-	private Request requestWallet(String path,String params,JsonObject headers,String method) throws IOException, InterruptedException {
+	private Request requestWallet(String path,JsonObject headers,String method) throws IOException, InterruptedException {
+		
+		
+		
+		
+		walletConnect(IP,path);
+		System.out.println(IP+path);
+		//Charset QUERY_CHARSET = Charset.forName("ISO8859-1");
+		
+		connection.setRequestMethod(method);
+		connection.setDoOutput(true);
+		
+		for(String i:headers.keySet()) connection.setRequestProperty(i, headers.getString(i));
+		
+
+	
+		
+		
+
+		try {
+			connection.connect();
+			Thread.sleep(100);
+			
+			BufferedReader reader=new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+			String read="";
+			StringBuilder sb=new StringBuilder();
+			while((read=reader.readLine())!=null) {
+				sb.append(read);
+			}
+			connection.disconnect();
+			if(sb.length()<1) return  new Request(Json.createReader(new StringReader("{}")).readObject(),connection.getResponseCode());
+			return new Request(Json.createReader(new StringReader(sb.toString())).readObject(),connection.getResponseCode());
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+private Request requestWallet(String path,String params,JsonObject headers,String method) throws IOException, InterruptedException {
 		
 		
 		
@@ -133,7 +172,7 @@ public class API {
 		return requestWallet(method,params.toString(),headers,httpMethod);
 	}
 	public Request noParameterWalletRequest(String method,JsonObject headers,String httpMethod) throws IOException, InterruptedException {
-		return requestWallet(method,"",headers,httpMethod);
+		return requestWallet(method,headers,httpMethod);
 	}
 	
 	

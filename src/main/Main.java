@@ -2,8 +2,7 @@ package main;
 
 import java.io.IOException;
 import java.io.StringReader;
-
-import javax.json.Json;
+import java.util.Random;
 
 import daemon_api.BlockMetaData;
 import daemon_api.BlockNotAcceptedException;
@@ -17,17 +16,26 @@ public class Main {
 	public static void main(String[] args) throws IOException, InterruptedException, BlockNotAcceptedException, WalletException {
 		//time to write a proper fucking unit test. In the main class.
 		
-		WalletDaemon d=new WalletDaemon("127.0.0.1","127.0.0.1",11898,"pass");
-	
-		d.createWallet("testwallet.wallet", "mysupersecretpassword");
+		WalletDaemon d=new WalletDaemon("80.216.14.90","80.216.14.90",11898,"pass");
+		
+		long l=new Random().nextLong();
+
+		String walletFileName="testwallet"+l+".wallet";
+		d.createWallet(walletFileName, "mysupersecretpassword");
+		
+		
+		
+		String pView = d.getKeys();
+		
+		String initialAdress = d.getAdresses()[0];
+		
+		
 		d.closeWallet();
-		d.openWallet("testwallet.wallet", "mysupersecretpassword");
+		d.openWallet(walletFileName, "mysupersecretpassword");
 		d.createNewAdress();
-		String pView=d.getKeys();
-		String initialAdress=d.getAdresses()[0];
 		String pSpend=d.getKeyPairAdress(initialAdress).PRIV_KEY;
 		d.closeWallet();
-		d.importByKey("importedtestwallet", "myothersupersecretpassword", 30000, pView, pSpend);
+		d.importByKey("imported"+walletFileName, "myothersupersecretpassword", 30000, pView, pSpend);
 	}
 	
 }

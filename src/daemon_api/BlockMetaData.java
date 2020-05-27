@@ -1,6 +1,5 @@
 package daemon_api;
 
-import javax.json.JsonArray;
 import javax.json.JsonObject;
 
 public class BlockMetaData {
