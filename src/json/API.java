@@ -104,8 +104,8 @@ public class API {
 
 		try {
 			connection.connect();
-			Thread.sleep(100);
-			
+			Thread.sleep(10000);
+			System.out.println(connection.getResponseCode());
 			BufferedReader reader=new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
 			String read="";

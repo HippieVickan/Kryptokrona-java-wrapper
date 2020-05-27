@@ -20,8 +20,10 @@ public class Main {
 		WalletDaemon d=new WalletDaemon("127.0.0.1","127.0.0.1",11898,"pass");
 	
 		d.createWallet("testwallet.wallet", "mysupersecretpassword");
+		
 		d.closeWallet();
 		d.openWallet("testwallet.wallet", "mysupersecretpassword");
+		d.getKeys();
 		d.createNewAdress();
 		String pView=d.getKeys();
 		String initialAdress=d.getAdresses()[0];

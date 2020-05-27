@@ -176,8 +176,12 @@ public class WalletDaemon {
 	
 	
 	public String getKeys() throws IOException, InterruptedException, WalletException {
-		
-		Request req=api.noParameterWalletRequest("/keys",  getGenericHeaders().build(), "GET");
+		JsonObjectBuilder jsb=Json.createObjectBuilder();
+		jsb.add("accept", "application/json");
+		jsb.add("X-API-KEY", this.API_KEY);
+		JsonObject js=jsb.build();
+		System.out.println("Json Object to server: "+js);
+		Request req=api.noParameterWalletRequest("/keys",  js, "GET");
 		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
 		
 		if(e==null) return req.RESULT.getString("privateViewKey");
