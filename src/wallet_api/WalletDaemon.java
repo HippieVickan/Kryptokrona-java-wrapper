@@ -9,6 +9,26 @@ import javax.json.JsonObjectBuilder;
 import json.API;
 import json.Request;
 
+/* FUNCTIONS:
+ * WALLET
+ * closeWallet
+ * createWallet
+ * openWallet
+ * importByKey
+ * importByMnemonic
+ * importViewOnly
+ * 
+ * Addresses
+ * getAddresses
+ * createNewAddress
+ * 
+ * KEYS
+ * getKeys
+ * getKeyPairAddress
+ * 
+ */
+
+
 public class WalletDaemon {
 	public API api;
 	
@@ -49,6 +69,8 @@ public class WalletDaemon {
 		return params;
 	}
 	
+	//WALLET
+	
 	public void openWallet(String fileName,String password) throws IOException, InterruptedException, WalletException {
 		JsonObjectBuilder params=getGenericParameters();
 		params.add("filename", fileName);
@@ -61,7 +83,25 @@ public class WalletDaemon {
 		if(e==null) return;
 		else throw e;
 	}
-	
+	public void createWallet(String fileName,String password) throws WalletException, IOException, InterruptedException {
+		JsonObjectBuilder params=getGenericParameters();
+		params.add("filename", fileName);
+		params.add("password", password);
+		Request req=api.walletRequest("/wallet/create", params.build(), getGenericHeaders().build(), "POST");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) return;
+		else throw e;
+	}
+	public void closeWallet() throws IOException, InterruptedException, WalletException {
+		
+		Request req=api.noParameterWalletRequest("/wallet",  getGenericHeaders().build(), "DELETE");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) return;
+		else throw e;
+	}
+
 	public void importByKey(String fileName,String password,int scanHeight,String privateViewKey,String privateSpendKey) throws WalletException, IOException, InterruptedException {
 		
 		JsonObjectBuilder params=getGenericParameters();
@@ -110,53 +150,14 @@ public class WalletDaemon {
 		
 	}
 	
-	public void createWallet(String fileName,String password) throws WalletException, IOException, InterruptedException {
-		JsonObjectBuilder params=getGenericParameters();
-		params.add("filename", fileName);
-		params.add("password", password);
-		Request req=api.walletRequest("/wallet/create", params.build(), getGenericHeaders().build(), "POST");
-		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
-		
-		if(e==null) return;
-		else throw e;
-	}
-	
-	public void closeWallet() throws IOException, InterruptedException, WalletException {
-		
-		Request req=api.noParameterWalletRequest("/wallet",  getGenericHeaders().build(), "DELETE");
-		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
-		
-		if(e==null) return;
-		else throw e;
-	}
-	
-	public void createNewAdress() throws IOException, InterruptedException, WalletException {
 
-		Request req=api.noParameterWalletRequest("/addresses/create",  getGenericHeaders().build(), "POST");
-		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
-		
-		if(e==null) return;
-		else throw e;
-	}
-	public void importWalletKeys(String fileName, String password,int height,String pView,String pSpend) throws IOException, InterruptedException, WalletException  {
-		
-		JsonObjectBuilder params=getGenericParameters();
-		params.add("filename", fileName);
-		params.add("password", password);
-		params.add("scanHeight", height);
-		params.add("privateViewKey", pView);
-		params.add("privateSpendKey", pSpend);
-		
-		Request req=api.walletRequest("/wallet/import/key", params.build(), getGenericHeaders().build(), "POST");
-		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
-		
-		if(e==null) return;
-		else throw e;
-		
-	}
 	
 	
 	
+	
+	
+	
+	//ADDRESSES
 	public String[] getAdresses() throws WalletException, IOException, InterruptedException {
 		
 		Request req=api.noParameterWalletRequest("/addresses",  getGenericHeaders().build(), "GET");
@@ -173,7 +174,29 @@ public class WalletDaemon {
 		if(e==null) return toReturn;
 		else throw e;
 	}
-	
+	public void deleteSubWallet(String address) throws WalletException, IOException, InterruptedException {
+		Request req=api.noParameterWalletRequest("/addresses/"+address,  getGenericHeaders().build(), "DELETE");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) return;
+		else throw e;
+	}
+	public void createNewAdress() throws IOException, InterruptedException, WalletException {
+
+		Request req=api.noParameterWalletRequest("/addresses/create",  getGenericHeaders().build(), "POST");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) return;
+		else throw e;
+	}
+	public String getPrimaryAddress() throws WalletException, IOException, InterruptedException {
+		Request req=api.noParameterWalletRequest("/addresses/create",  getGenericHeaders().build(), "GET");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null)  return req.RESULT.getString("address");
+		else throw e;
+	}
+	//KEYS
 	
 	public String getKeys() throws IOException, InterruptedException, WalletException {
 		JsonObjectBuilder jsb=Json.createObjectBuilder();
