@@ -3,6 +3,7 @@ package wallet_api;
 import java.io.IOException;
 
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
@@ -290,6 +291,157 @@ public class WalletDaemon {
 		else throw e;
 	}
 	
+	//TRANSACTIONS
+	public WalletTransactionData[] getTransactions() throws IOException, InterruptedException, WalletException {
+		Request req=api.noParameterWalletRequest("/transactions",  getGenericHeaders().build(), "GET");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) {
+			JsonArray txs=req.RESULT.getJsonArray("transactions");
+			
+			WalletTransactionData[] toReturn=new WalletTransactionData[txs.size()];		
+			for(int i=0; i<=txs.size()-1; i++) {
+				toReturn[i]=new WalletTransactionData(txs.getJsonObject(i));		
+			}
+			return toReturn;
+			
+		}
+		else throw e;
+	}
+	public WalletTransactionData[] getTransactions(int start) throws IOException, InterruptedException, WalletException {
+		Request req=api.noParameterWalletRequest("/transactions/"+start,  getGenericHeaders().build(), "GET");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) {
+			JsonArray txs=req.RESULT.getJsonArray("transactions");
+			
+			WalletTransactionData[] toReturn=new WalletTransactionData[txs.size()];		
+			for(int i=0; i<=txs.size()-1; i++) {
+				toReturn[i]=new WalletTransactionData(txs.getJsonObject(i));		
+			}
+			return toReturn;
+			
+		}
+		else throw e;
+	}
+	public WalletTransactionData[] getTransactions(int start,int end) throws IOException, InterruptedException, WalletException {
+		Request req=api.noParameterWalletRequest("/transactions/"+start+"/"+end,  getGenericHeaders().build(), "GET");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) {
+			JsonArray txs=req.RESULT.getJsonArray("transactions");
+			
+			WalletTransactionData[] toReturn=new WalletTransactionData[txs.size()];		
+			for(int i=0; i<=txs.size()-1; i++) {
+				toReturn[i]=new WalletTransactionData(txs.getJsonObject(i));		
+			}
+			return toReturn;
+			
+		}
+		else throw e;
+	}
+	
+	
+	
+	
+	
+	public WalletTransactionData[] getTransactions(String address) throws IOException, InterruptedException, WalletException {
+		Request req=api.noParameterWalletRequest("/transactions/address/"+address,  getGenericHeaders().build(), "GET");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) {
+			JsonArray txs=req.RESULT.getJsonArray("transactions");
+			
+			WalletTransactionData[] toReturn=new WalletTransactionData[txs.size()];		
+			for(int i=0; i<=txs.size()-1; i++) {
+				toReturn[i]=new WalletTransactionData(txs.getJsonObject(i));		
+			}
+			return toReturn;
+			
+		}
+		else throw e;
+	}
+	public WalletTransactionData[] getTransactions(String address,int start) throws IOException, InterruptedException, WalletException {
+		Request req=api.noParameterWalletRequest("/transactions/address/"+address+"/"+start,  getGenericHeaders().build(), "GET");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) {
+			JsonArray txs=req.RESULT.getJsonArray("transactions");
+			
+			WalletTransactionData[] toReturn=new WalletTransactionData[txs.size()];		
+			for(int i=0; i<=txs.size()-1; i++) {
+				toReturn[i]=new WalletTransactionData(txs.getJsonObject(i));		
+			}
+			return toReturn;
+			
+		}
+		else throw e;
+	}
+	public WalletTransactionData[] getTransactions(String address,int start,int end) throws IOException, InterruptedException, WalletException {
+		Request req=api.noParameterWalletRequest("/transactions/address/"+address+"/"+start+"/"+end,  getGenericHeaders().build(), "GET");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) {
+			JsonArray txs=req.RESULT.getJsonArray("transactions");
+			
+			WalletTransactionData[] toReturn=new WalletTransactionData[txs.size()];		
+			for(int i=0; i<=txs.size()-1; i++) {
+				toReturn[i]=new WalletTransactionData(txs.getJsonObject(i));		
+			}
+			return toReturn;
+			
+		}
+		else throw e;
+	}
+	
+	
+	
+	
+	
+	
+	public WalletTransactionData getTransactionByHash(String hash) throws IOException, InterruptedException, WalletException {
+		Request req=api.noParameterWalletRequest("/transactions/hash/"+hash,  getGenericHeaders().build(), "GET");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) return new WalletTransactionData(req.RESULT.getJsonObject("transactions"));
+		else throw e;
+	}
+	public WalletTransactionData[] getUnconfirmedTransactions() throws IOException, InterruptedException, WalletException {
+		Request req=api.noParameterWalletRequest("/transactions/unconfirmed",  getGenericHeaders().build(), "GET");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) {
+			JsonArray txs=req.RESULT.getJsonArray("transactions");
+			WalletTransactionData[] toReturn=new WalletTransactionData[txs.size()];		
+			for(int i=0; i<=txs.size()-1; i++) {
+				toReturn[i]=new WalletTransactionData(txs.getJsonObject(i));		
+			}
+			return toReturn;
+			
+		}
+		else throw e;
+	}
+	public WalletTransactionData getUnconfirmedTransactionByHash(String hash) throws IOException, InterruptedException, WalletException {
+		Request req=api.noParameterWalletRequest("/transactions/unconfirmed/"+hash,  getGenericHeaders().build(), "GET");
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		
+		if(e==null) return new WalletTransactionData(req.RESULT.getJsonObject("transactions"));
+		else throw e;
+	}
+	
+	public TransactionStatus sendTransaction(PreparedTransaction p) throws IOException, InterruptedException, WalletException {
+		JsonObjectBuilder params=getGenericParameters();
+		params.add("destination", p.DESTINATION);
+		params.add("amount", p.AMOUNT);
+		params.add("paymentID", p.PAYMENT_ID);
+
+		Request req=api.walletRequest("/transactions/send/basic", params.build(), getGenericHeaders().build(), "POST");
+		
+		WalletException e= handleStandardErrorCodes(req.RESPONSE_CODE);
+		if(e==null) return new TransactionStatus(req.RESULT);
+		else throw e;
+		
+	}
 	
 	
 	public WalletException handleStandardErrorCodes(int code) {
