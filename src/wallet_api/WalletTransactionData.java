@@ -18,12 +18,12 @@ public class WalletTransactionData {
 		BLOCK_HEIGHT=in.getInt("blockHeight");
 		FEE=Double.parseDouble(in.get("fee").toString());
 		HASH=in.getString("hash");
-		COINBASE=in.getBoolean("isCoinBaseTransaction");
+		COINBASE=in.getBoolean("isCoinbaseTransaction");
 		PAYMENT_ID=in.getString("paymentID");
 		TIMESTAMP=in.getInt("timestamp");
 		UNLOCK_TIME=in.getInt("unlockTime");
-		RECIEVER=in.getJsonObject("transfers").getString("address");
-		AMOUNT=in.getJsonObject("transfers").getInt("amount");
+		RECIEVER=in.getJsonArray("transfers").getJsonObject(0).getString("address");
+		AMOUNT=in.getJsonArray("transfers").getJsonObject(0).getInt("amount");
 	}
 	
 }

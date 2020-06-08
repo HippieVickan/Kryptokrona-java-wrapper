@@ -8,6 +8,7 @@ public class TransactionStatus {
 	public boolean RELAYED;
 	
 	public TransactionStatus(JsonObject in) {
+		System.out.println(in.toString());
 		HASH=in.getString("transactionHash");
 		FEE=in.getInt("fee");
 		RELAYED=in.getBoolean("relayedToNetwork");

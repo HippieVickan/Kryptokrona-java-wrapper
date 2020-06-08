@@ -113,15 +113,15 @@ public class API {
 				sb.append(read);
 			}
 			connection.disconnect();
-			if(sb.length()<1) return  new Request(Json.createReader(new StringReader("{}")).readObject(),connection.getResponseCode());
-			return new Request(Json.createReader(new StringReader(sb.toString())).readObject(),connection.getResponseCode());
+			if(sb.length()<1) return  new Request(Json.createReader(new StringReader("{}")).readObject(),connection.getResponseCode(),connection.getErrorStream());
+			return new Request(Json.createReader(new StringReader(sb.toString())).readObject(),connection.getResponseCode(),connection.getErrorStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw e;
 		}
 	}
 	
-private Request requestWallet(String path,String params,JsonObject headers,String method) throws IOException, InterruptedException {
+	private Request requestWallet(String path,String params,JsonObject headers,String method) throws IOException, InterruptedException {
 		
 		
 		
@@ -143,7 +143,7 @@ private Request requestWallet(String path,String params,JsonObject headers,Strin
 
 		try {
 			connection.connect();
-			Thread.sleep(10000);
+			Thread.sleep(1000);
 			System.out.println(connection.getResponseCode());
 			BufferedReader reader=new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
@@ -153,8 +153,8 @@ private Request requestWallet(String path,String params,JsonObject headers,Strin
 				sb.append(read);
 			}
 			connection.disconnect();
-			if(sb.length()<1) return  new Request(Json.createReader(new StringReader("{}")).readObject(),connection.getResponseCode());
-			return new Request(Json.createReader(new StringReader(sb.toString())).readObject(),connection.getResponseCode());
+			if(sb.length()<1) return  new Request(Json.createReader(new StringReader("{}")).readObject(),connection.getResponseCode(),connection.getErrorStream());
+			return new Request(Json.createReader(new StringReader(sb.toString())).readObject(),connection.getResponseCode(),connection.getErrorStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw e;
